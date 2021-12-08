@@ -1,0 +1,6 @@
+.title_degrading{
+    text-transform: uppercase;
+	background: linear-gradient(0.5turn, #002B7F 24%, #ffffff 38%, #CE1126 48%, #ffffff, #002B7F 87%);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}

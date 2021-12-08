@@ -1,11 +1,12 @@
 import axios from "axios";
 import { useState } from "react";
 import { useHistory } from "react-router";
-
+import Swal from 'sweetalert2';
 function Add() {
 
     /****************************  const *****************************/
     const [id, setId] = useState('');
+    window.$id = id;
     const [category, setCategory] = useState('');
     const [name, setName] = useState('');
     const [photoUrls, setPhotourls] = useState('');
@@ -35,7 +36,7 @@ function Add() {
       /* Captured data from UI and send to API*/
       function postLine(){
         setPet(({
-          "id": 500,
+          "id": id,
           "category": category,
           "name": name,
           "photoUrls": photoUrls,
@@ -51,9 +52,9 @@ function Add() {
             method: 'post',
             url: 'https://petstore.swagger.io/v2/pet',
             data: {
-                "id": 500,
+                "id": id,
                 "category": {
-                    "id": 500,
+                    "id": id,
                     "name": category
                 },
                 "name": name,
@@ -62,13 +63,25 @@ function Add() {
                 ],
                 "tags": [
                     {
-                    "id": 500,
+                    "id": id,
                     "name": status
                     }
                 ],
                 "status": status
             }
           });
+          Swal.fire({
+            title: 'Pet added succesfully!',
+            icon: "success",
+            background: "#d4edda",
+            timer:2000,
+            timerProgressBar:true,
+            toast: true,
+            position:"top-end",
+            width: "300px",
+            showConfirmButton: false,
+            padding: "0.3rem"
+          })
           history.push('/');
         
       }
@@ -78,6 +91,10 @@ function Add() {
         <div>
                 <h3>Add new pet</h3>
                 <form> 
+                    <div class="form-group">
+                        <label for="ownerName">Pet ID :</label>
+                        <input type="text" class="form-control" id="idPet" aria-describedby="idPet" placeholder="Enter pet ID" onChange={(e) => setId(e.target.value)}/>
+                    </div>
                     <div class="form-group">
                         <label for="ownerName">Owner name:</label>
                         <input type="text" class="form-control" id="ownerName" aria-describedby="ownerName" placeholder="Enter owner name" onChange={(e) => setCategory(e.target.value)}/>

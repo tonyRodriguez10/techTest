@@ -14,6 +14,8 @@ import Add from '../src/components/Add';
 import Dashboard from './components/Dashboard';
 import  Navbar  from './components/Navbar'; 
 import './styles/layouts/navbar.css'; 
+import About from './components/About';
+import Footer from './components/Footer';
 
 
 function App(){
@@ -29,6 +31,7 @@ function App(){
 
                 <Route exact path="/dashboard">
                    <Dashboard />
+                   <Footer />
                 </Route>
 
                 <Route exact path="/edit/:id">
@@ -39,8 +42,9 @@ function App(){
                     <Add />
                 </Route>
                  
-
-                  
+                <Route exact path="/about_us">
+                    <About />
+                </Route>
 
                 </Switch>
                 </Router>        

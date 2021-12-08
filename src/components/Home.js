@@ -7,58 +7,96 @@ import '../styles/layouts/buttons.css';
 import Swal from 'sweetalert2';
 
 function Home(){
-      /* API URL */
-  const baseURL = "https://petstore.swagger.io/v2/pet/500";
+
+  const [id, setId] = useState('');
   const [data, setData]=useState([]); 
-  window.$id = 0;
   const history = useHistory();
  
   function refreshPage() {
     window.location.reload(false);
   }
 
-  async function  handleDelete(id){
-    await axios.delete('https://petstore.swagger.io/v2/pet/')
+  function deleteArticle(id){
+     axios.delete('https://petstore.swagger.io/v2/pet/'+id)
     .then(res=>{  
       Swal.fire({
 				title: 'Pet deleted succesfully!',
 				icon: "success",
 				background: "#d4edda",
-				timer:3000,
+				timer:2000,
 				timerProgressBar:true,
 				toast: true,
 				position:"top-end",
-				width: "600px",
+				width: "300px",
 				showConfirmButton: false,
 				padding: "0.3rem"
 			  })
+        refreshPage();
     })
-  };
+    .catch(function (error){
+      Swal.fire({
+        title: 'Internal API error, please try again :c',
+        icon: "error",
+        background: "#d4edda",
+        timer:4000,
+        timerProgressBar:true,
+        toast: true,
+        position:"top-end",
+        width: "300px",
+        showConfirmButton: false,
+        padding: "0.3rem"
+      })
+    })
+	}
 
   const getRequest=async()=>{
-        await axios.get(baseURL)
-        .then(res=>{  
-          setData(res.data);     
-          console.log(res.data.photoUrls[0])
-        })
-        .catch(function (error){
-         
-        })
-      }
-
-
-      
-  useEffect(async()=>{
-    await getRequest();
-  },[])
+          /* API URL */
+          const baseURL = "https://petstore.swagger.io/v2/pet/"+id;
+            await axios.get(baseURL)
+            .then(res=>{  
+              setData(res.data); 
+              Swal.fire({
+                title: 'Pet found!',
+                icon: "success",
+                background: "#d4edda",
+                timer:1000,
+                timerProgressBar:true,
+                toast: true,
+                position:"top-end",
+                width: "300px",
+                showConfirmButton: false,
+                padding: "0.3rem"
+              })
+            })
+            .catch(function (error){
+              setData('');
+              Swal.fire({
+                title: 'Pet not found!',
+                icon: "error",
+                background: "#d4edda",
+                timer:1000,
+                timerProgressBar:true,
+                toast: true,
+                position:"top-end",
+                width: "300px",
+                showConfirmButton: false,
+                padding: "0.3rem"
+              })
+            })
+  }
 
   return (
     <div className="Home">
+       <input type="number" id="searchID" aria-describedby="searchID" placeholder="Enter pet ID to search" onChange={(e) => setId(e.target.value)}/>
+       <button type="button" className="btn btn-info" onClick={()=>getRequest()}>Go!</button>
       <Link to="/add"><button className="btn btn-success btnAdd" >Add a pet</button></Link>
       <button className="btn btn-warning" onClick={refreshPage}>Reload</button>
-  {Object.keys(data).length === 0 ? (
+  {Object.keys(data).length === 0 ? 
+  (
     <div style={{fontSize : '50px', color : 'red'}}>...We don't fount any pet :c </div>
-  ) : (
+    
+  ) : 
+  (
       <React.Fragment>
         
       
@@ -74,17 +112,17 @@ function Home(){
           </thead>
           <tbody>
             <tr key={data.id}>
-              <td>{data.category.name}</td>
-              <td>{data.name}</td>
-              <img src={data.photoUrls[0]} width="100px" height="100px"/>
-              <td>{data.status}</td>
+              <td>{data.category.name != "" ? data.category.name : "N.A"}</td>
+              <td>{data.name != "" ? data.name : "N.A" }</td>
+              <td><img src={data.photoUrls[0]} width="100px" height="100px"/></td>
+              <td>{data.status != "" ? data.status : "N.A" }</td>
               <td> 
                 <button className="btn btn-success" style={{marginRight : '3%'}} onClick={() => {history.push(`/edit/${data.id}`)
                   window.$id = data.id;
                 }}>Edit a pet
                 </button>
 
-                {/* <button className="btn btn-success" onClick={handleDelete(data.id)}>Delete a pet</button> */}
+                <button className="btn btn-success" onClick={() => deleteArticle(data.id)}>Delete a pet</button>
                 </td>
             </tr>
           </tbody>
