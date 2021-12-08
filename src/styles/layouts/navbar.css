@@ -1,0 +1,21 @@
+.navbar{
+    display:inline-flex;
+    width: 100%;
+}
+.navbar_div--left{
+    width: 5%;;
+}
+.navbar_div--right{
+    width: 95%;;
+}
+.navbar-brand{
+    margin-left: 2%;
+}
+a{
+    text-decoration: none;
+    color: #fff;
+    padding-right: 4%;
+  }
+  a:hover{
+    color: rgb(93, 24, 24);
+  }
